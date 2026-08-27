@@ -1,0 +1,47 @@
+module.exports = {
+  defaultRegion: 'Nilgiri Elephant Reserve & Western Ghats Habitat Complex',
+  defaultBounds: {
+    minLat: 11.2,
+    maxLat: 11.9,
+    minLng: 76.2,
+    maxLng: 77.2,
+  },
+  supportedSpecies: [
+    {
+      id: 'elephant',
+      name: 'Asian Elephant (Elephas maximus)',
+      minCorridorWidthKm: 0.8,
+      maxSlopeDegrees: 18,
+      preferredHabitat: ['Dense Forest', 'Bamboo Scrub', 'Riverine Forest'],
+      roadSensitivity: 0.85,
+      humanSettlementSensitivity: 0.9,
+    },
+    {
+      id: 'tiger',
+      name: 'Bengal Tiger (Panthera tigris)',
+      minCorridorWidthKm: 0.5,
+      maxSlopeDegrees: 30,
+      preferredHabitat: ['Dense Forest', 'Grassland', 'Moist Deciduous'],
+      roadSensitivity: 0.75,
+      humanSettlementSensitivity: 0.95,
+    },
+    {
+      id: 'leopard',
+      name: 'Indian Leopard (Panthera pardus)',
+      minCorridorWidthKm: 0.3,
+      maxSlopeDegrees: 35,
+      preferredHabitat: ['Forest', 'Scrubland', 'Rocky Outcrop'],
+      roadSensitivity: 0.6,
+      humanSettlementSensitivity: 0.7,
+    },
+    {
+      id: 'gaur',
+      name: 'Indian Gaur (Bos gaurus)',
+      minCorridorWidthKm: 0.6,
+      maxSlopeDegrees: 22,
+      preferredHabitat: ['Deciduous Forest', 'Grassland'],
+      roadSensitivity: 0.7,
+      humanSettlementSensitivity: 0.8,
+    },
+  ],
+};
