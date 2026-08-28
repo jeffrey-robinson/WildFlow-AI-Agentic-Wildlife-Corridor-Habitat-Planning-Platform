@@ -61,10 +61,10 @@ app.use(errorHandler);
 // Start Server & Connect Database
 const startServer = async () => {
   await connectDB();
-  let currentPort = env.port;
+  const PORT = process.env.PORT || env.port || 5000;
   
   const listenOnPort = (portToTry) => {
-    server.listen(portToTry)
+    server.listen(portToTry, '0.0.0.0')
       .on('listening', () => {
         console.log(`===================================================`);
         console.log(` 🌳 WildFlow AI Backend Server running on port ${portToTry}`);
@@ -73,7 +73,7 @@ const startServer = async () => {
         console.log(`===================================================`);
       })
       .on('error', (err) => {
-        if (err.code === 'EADDRINUSE') {
+        if (err.code === 'EADDRINUSE' && !process.env.PORT) {
           console.warn(`[Port Warning]: Port ${portToTry} in use. Retrying on port ${portToTry + 1}...`);
           listenOnPort(portToTry + 1);
         } else {
@@ -82,7 +82,7 @@ const startServer = async () => {
       });
   };
 
-  listenOnPort(currentPort);
+  listenOnPort(PORT);
 };
 
 if (require.main === module) {
