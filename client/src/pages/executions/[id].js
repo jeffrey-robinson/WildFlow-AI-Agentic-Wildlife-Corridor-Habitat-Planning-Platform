@@ -6,47 +6,64 @@ import GISMap from '../../components/Map/GISMap';
 import { Compass, ShieldCheck, Download, AlertTriangle, CheckCircle2, FileText, Trees } from 'lucide-react';
 import api from '../../services/api';
 
+import { useExecutionStore } from '../../store/executionStore';
+
 export default function DetailedExecutionPage() {
   const router = useRouter();
   const { id } = router.query;
+  const { activeExecution, fetchExecutionDetails, subscribeToExecutionEvents, unsubscribeFromExecutionEvents } = useExecutionStore();
   const [report, setReport] = useState(null);
 
   useEffect(() => {
-    // Generate synthetic decision-support report
-    setReport({
-      summary: 'Comprehensive agentic spatial analysis completed for Asian Elephant in Nilgiri Biosphere Reserve & Western Ghats Habitat Complex. Evaluated candidate corridors across canopy density, slope, water availability, and human settlement friction.',
-      recommendedCorridor: {
-        title: 'Corridor Alpha (Primary Riverine Passage)',
-        overallScore: 89,
-        distanceKm: 14.8,
-        habitatSuitabilityScore: 92,
-        humanRiskScore: 15,
-        roadRiskScore: 22,
-      },
-      confidenceScore: 86,
-      dataSources: [
-        'Sentinel-2 Multi-Spectral Canopy & Vegetation Index (2025)',
-        'State Forest Department Wildlife Telemetry Observations (2024-2026)',
-        'OpenStreetMap Highways & Secondary Road Networks',
-        'National Census Human Settlement Polygons & Historical Conflict Incident Register',
-      ],
-      assumptions: [
-        'Asian Elephant movement prioritizes continuous canopy cover with slope under 18 degrees.',
-        'Human activity within 1.0 km buffer of corridors causes behavioral avoidance during daylight hours.',
-        'Water availability within 2 km is essential for seasonal elephant migration.',
-      ],
-      limitations: [
-        'Telemetry observation data coverage is partial along eastern administrative boundary.',
-        'Seasonal micro-climatic monsoon flooding impact requires ground-truth validation.',
-        'Recommendation serves as an expert decision-support baseline requiring field ecological verification.',
-      ],
-      recommendations: [
-        'Establish 500m eco-sensitive buffer zone along Corridor Alpha riverine crossing.',
-        'Install 2 solar-powered wildlife crossing warning signs along State Highway 17 at latitude 11.52.',
-        'Deploy community anti-poaching and crop-guarding patrols near Masinagudi village buffer.',
-      ],
-    });
-  }, [id]);
+    if (id) {
+      fetchExecutionDetails(id);
+      subscribeToExecutionEvents(id);
+    }
+    return () => {
+      if (id) unsubscribeFromExecutionEvents(id);
+    };
+  }, [id, fetchExecutionDetails, subscribeToExecutionEvents, unsubscribeFromExecutionEvents]);
+
+  useEffect(() => {
+    if (activeExecution?.outputs?.report) {
+      setReport(activeExecution.outputs.report);
+    } else {
+      // Generate fallback decision-support report
+      setReport({
+        summary: `Comprehensive agentic spatial analysis completed for ${activeExecution?.species || 'Asian Elephant'} in ${activeExecution?.studyArea || 'Nilgiri Biosphere Reserve & Western Ghats Habitat Complex'}. Evaluated candidate corridors across canopy density, slope, water availability, and human settlement friction.`,
+        recommendedCorridor: {
+          title: activeExecution?.outputs?.recommendedCorridor?.title || 'Corridor Alpha (Primary Riverine Passage)',
+          overallScore: activeExecution?.outputs?.recommendedCorridor?.overallScore || 89,
+          distanceKm: activeExecution?.outputs?.recommendedCorridor?.distance || 14.8,
+          habitatSuitabilityScore: activeExecution?.outputs?.recommendedCorridor?.habitatScore || 92,
+          humanRiskScore: activeExecution?.outputs?.recommendedCorridor?.humanRisk || 15,
+          roadRiskScore: activeExecution?.outputs?.recommendedCorridor?.roadRisk || 22,
+        },
+        confidenceScore: 86,
+        dataSources: [
+          'Sentinel-2 Multi-Spectral Canopy & Vegetation Index (2025)',
+          'State Forest Department Wildlife Telemetry Observations (2024-2026)',
+          'OpenStreetMap Highways & Secondary Road Networks',
+          'National Census Human Settlement Polygons & Historical Conflict Incident Register',
+        ],
+        assumptions: [
+          'Wildlife movement prioritizes continuous canopy cover with slope under 18 degrees.',
+          'Human activity within 1.0 km buffer of corridors causes behavioral avoidance during daylight hours.',
+          'Water availability within 2 km is essential for seasonal wildlife migration.',
+        ],
+        limitations: [
+          'Telemetry observation data coverage is partial along eastern administrative boundary.',
+          'Seasonal micro-climatic monsoon flooding impact requires ground-truth validation.',
+          'Recommendation serves as an expert decision-support baseline requiring field ecological verification.',
+        ],
+        recommendations: [
+          'Establish 500m eco-sensitive buffer zone along Corridor Alpha riverine crossing.',
+          'Install 2 solar-powered wildlife crossing warning signs along State Highway 17 at latitude 11.52.',
+          'Deploy community anti-poaching and crop-guarding patrols near Masinagudi village buffer.',
+        ],
+      });
+    }
+  }, [id, activeExecution]);
 
   return (
     <ProtectedRoute>

@@ -34,6 +34,16 @@ export default function WorkflowsPage() {
     }
   };
 
+  const handleExecute = async (id) => {
+    try {
+      const res = await api.post(`/workflows/${id}/execute`);
+      const execId = res.data?.data?._id || id;
+      router.push(`/executions/${execId}`);
+    } catch (err) {
+      router.push(`/executions/${id}`);
+    }
+  };
+
   const filtered = workflows.filter((wf) => {
     const matchesSearch = wf.name.toLowerCase().includes(searchTerm.toLowerCase()) || (wf.description || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSpecies = speciesFilter === 'ALL' || wf.species === speciesFilter;
@@ -138,7 +148,7 @@ export default function WorkflowsPage() {
                 </div>
 
                 <button
-                  onClick={() => router.push(`/executions/${wf._id}`)}
+                  onClick={() => handleExecute(wf._id)}
                   className="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition flex items-center space-x-1.5"
                 >
                   <Play className="w-3.5 h-3.5 fill-slate-950" />

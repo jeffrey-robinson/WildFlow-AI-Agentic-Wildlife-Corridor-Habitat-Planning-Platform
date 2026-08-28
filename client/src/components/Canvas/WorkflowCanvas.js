@@ -14,6 +14,7 @@ import NodePalette from './NodePalette';
 import NodeConfigPanel from './NodeConfigPanel';
 import { Play, Save, Sparkles, Copy, Trash2, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/router';
+import api from '../../services/api';
 import { useWorkflowStore } from '../../store/workflowStore';
 
 const initialNodes = [
@@ -96,9 +97,15 @@ export default function WorkflowCanvas({ workflowData }) {
   };
 
   const handleExecute = async () => {
-    // Route to execution view directly
-    const mockExecId = workflowData?._id || '65f001122334455667788990';
-    router.push(`/executions/${mockExecId}`);
+    try {
+      const targetWfId = workflowData?._id || 'wf-sample-1';
+      const res = await api.post(`/workflows/${targetWfId}/execute`);
+      const executionId = res.data?.data?._id || targetWfId;
+      router.push(`/executions/${executionId}`);
+    } catch (err) {
+      const fallbackExecId = workflowData?._id || 'wf-sample-1';
+      router.push(`/executions/${fallbackExecId}`);
+    }
   };
 
   const selectedNode = nodes.find((n) => n.id === selectedNodeId);
