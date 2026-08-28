@@ -34,7 +34,23 @@ app.use(morgan('dev'));
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
-// Health Endpoint
+// Root & Health Endpoints
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    app: 'WildFlow AI Conservation Intelligence Platform',
+    message: 'WildFlow AI Backend API is active and running',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      workflows: '/api/workflows',
+      executions: '/api/executions',
+    },
+    timestamp: new Date(),
+    environment: env.nodeEnv,
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
