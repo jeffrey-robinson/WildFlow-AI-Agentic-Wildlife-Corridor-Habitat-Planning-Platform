@@ -1,0 +1,19 @@
+{
+  "name": "wildflow-ai",
+  "version": "1.0.0",
+  "description": "WildFlow AI — Agentic Wildlife Corridor & Habitat Planning Platform",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install --prefix server && npm install --prefix client",
+    "start": "npm --prefix server run start",
+    "start:server": "npm --prefix server run start",
+    "start:client": "npm --prefix client run start",
+    "build": "npm --prefix server run build",
+    "build:server": "npm --prefix server run build",
+    "build:client": "npm --prefix client run build",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "dev": "npm --prefix client run dev",
+    "seed": "npm --prefix server run seed"
+  }
+}

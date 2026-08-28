@@ -79,6 +79,29 @@ npm run dev
 
 ---
 
+## 🌐 Deployment Configuration
+
+When deploying on platforms like **Render**, **Railway**, **Vercel**, or **Heroku**, ensure the following service settings are configured:
+
+### ⚙️ Backend Web Service
+- **Root Directory**: `server` *(Important: Not `backend`)*
+- **Build Command**: `npm install`
+- **Start Command**: `npm start` (or `node src/app.js`)
+- **Environment Variables**:
+  - `PORT`: `5000` (or host assigned port)
+  - `NODE_ENV`: `production`
+  - `MONGO_URI`: `your_mongodb_connection_string`
+  - `JWT_SECRET`: `your_jwt_secret`
+
+### 🖥️ Frontend Web Service
+- **Root Directory**: `client`
+- **Build Command**: `npm run build`
+- **Start Command**: `npm start`
+- **Environment Variables**:
+  - `NEXT_PUBLIC_API_URL`: `https://your-backend-url.onrender.com`
+
+---
+
 ## 🛡️ License
 
 Distributed under the MIT License.
