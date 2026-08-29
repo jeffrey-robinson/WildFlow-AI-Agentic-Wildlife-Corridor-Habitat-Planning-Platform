@@ -8,7 +8,7 @@
     "start": "npm --prefix server run start",
     "start:server": "npm --prefix server run start",
     "start:client": "npm --prefix client run start",
-    "build": "npm --prefix server run build",
+    "build": "npm --prefix client run build",
     "build:server": "npm --prefix server run build",
     "build:client": "npm --prefix client run build",
     "dev:server": "npm --prefix server run dev",
